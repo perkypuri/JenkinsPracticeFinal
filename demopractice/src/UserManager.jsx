@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./style.css";
-import config from "./config"; // points to backend
+import config from "./config"; // relative backend URL
 
-//const BASE_URL = config.url/user;
-const BASE_URL = `${config.url}/user`;
-
+const BASE_URL = `${config.url}/user`;  // will resolve to /userpractice/user
 
 const UserManager = () => {
   const [users, setUsers] = useState([]);
@@ -77,41 +75,19 @@ const UserManager = () => {
       <h2>User Management</h2>
 
       <div className="form-grid">
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          value={user.name}
-          onChange={handleChange}
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={user.email}
-          onChange={handleChange}
-        />
+        <input type="text" name="name" placeholder="Name" value={user.name} onChange={handleChange} />
+        <input type="email" name="email" placeholder="Email" value={user.email} onChange={handleChange} />
         <select name="gender" value={user.gender} onChange={handleChange}>
           <option value="">Select Gender</option>
           <option value="MALE">MALE</option>
           <option value="FEMALE">FEMALE</option>
         </select>
-        <input
-          type="text"
-          name="contact"
-          placeholder="Contact"
-          value={user.contact}
-          onChange={handleChange}
-        />
+        <input type="text" name="contact" placeholder="Contact" value={user.contact} onChange={handleChange} />
       </div>
 
       <div className="btn-group">
-        <button className="btn-blue" onClick={addUser}>
-          Add User
-        </button>
-        <button className="btn-gray" onClick={resetForm}>
-          Reset
-        </button>
+        <button className="btn-blue" onClick={addUser}>Add User</button>
+        <button className="btn-gray" onClick={resetForm}>Reset</button>
       </div>
 
       <h3>All Users</h3>
@@ -139,12 +115,7 @@ const UserManager = () => {
                   <td>{u.gender}</td>
                   <td>{u.contact}</td>
                   <td>
-                    <button
-                      className="btn-red"
-                      onClick={() => deleteUser(u.id)}
-                    >
-                      Delete
-                    </button>
+                    <button className="btn-red" onClick={() => deleteUser(u.id)}>Delete</button>
                   </td>
                 </tr>
               ))}
