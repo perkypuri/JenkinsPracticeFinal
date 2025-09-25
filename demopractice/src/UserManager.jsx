@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./style.css";
-import config from "./config"; // Correct import since config.js is in src/
+import config from "./config"; // Correct relative import
 
 const UserManager = () => {
   const [users, setUsers] = useState([]);
@@ -13,8 +13,7 @@ const UserManager = () => {
   });
   const [message, setMessage] = useState("");
 
-  // Absolute base URL for backend
-  const baseUrl = `${config.url}/user`;
+  const baseUrl = `${config.url}/user`; // Absolute backend URL
 
   // Fetch all users
   const fetchAllUsers = async () => {
@@ -31,12 +30,10 @@ const UserManager = () => {
     fetchAllUsers();
   }, []);
 
-  // Handle form input changes
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
-  // Add new user
   const addUser = async () => {
     try {
       await axios.post(`${baseUrl}/adduser`, user);
@@ -49,7 +46,6 @@ const UserManager = () => {
     }
   };
 
-  // Delete user
   const deleteUser = async (id) => {
     try {
       await axios.delete(`${baseUrl}/delete/${id}`);
@@ -61,7 +57,6 @@ const UserManager = () => {
     }
   };
 
-  // Reset form
   const resetForm = () => {
     setUser({
       name: "",
