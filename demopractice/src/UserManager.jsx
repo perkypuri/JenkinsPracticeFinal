@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./style.css";
-import config from "./config"; // dynamic backend URL
+
+// Backend URL (always points to actual backend port)
+const BASE_URL = "http://localhost:2001/user"; // Spring Boot backend
 
 const UserManager = () => {
   const [users, setUsers] = useState([]);
@@ -13,13 +15,10 @@ const UserManager = () => {
   });
   const [message, setMessage] = useState("");
 
-  // Base URL dynamically points to dev or prod backend
-  const baseUrl = `${config.url}/user`;
-
   // Fetch all users
   const fetchAllUsers = async () => {
     try {
-      const res = await axios.get(`${baseUrl}/viewall`);
+      const res = await axios.get(`${BASE_URL}/viewall`);
       setUsers(res.data);
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -37,7 +36,7 @@ const UserManager = () => {
 
   const addUser = async () => {
     try {
-      await axios.post(`${baseUrl}/adduser`, user);
+      await axios.post(`${BASE_URL}/adduser`, user);
       setMessage("User added successfully.");
       fetchAllUsers();
       resetForm();
@@ -49,7 +48,7 @@ const UserManager = () => {
 
   const deleteUser = async (id) => {
     try {
-      await axios.delete(`${baseUrl}/delete/${id}`);
+      await axios.delete(`${BASE_URL}/delete/${id}`);
       setMessage("User deleted successfully.");
       setUsers(users.filter((u) => u.id !== id));
     } catch (error) {
