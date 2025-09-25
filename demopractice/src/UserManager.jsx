@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./style.css";
 
-// Backend URL (always points to actual backend port)
-const BASE_URL = "http://localhost:2001/user"; // Spring Boot backend
+// Use relative path for backend
+const BASE_URL = "/userpractice/user";
 
 const UserManager = () => {
   const [users, setUsers] = useState([]);
