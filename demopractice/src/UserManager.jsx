@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./style.css";
+import config from "./config"; // points to backend
 
-// Use relative path for backend
-const BASE_URL = "/userpractice/user";
+const BASE_URL = config.url;
 
 const UserManager = () => {
   const [users, setUsers] = useState([]);
@@ -15,7 +15,6 @@ const UserManager = () => {
   });
   const [message, setMessage] = useState("");
 
-  // Fetch all users
   const fetchAllUsers = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/viewall`);
@@ -58,12 +57,7 @@ const UserManager = () => {
   };
 
   const resetForm = () => {
-    setUser({
-      name: "",
-      email: "",
-      gender: "",
-      contact: "",
-    });
+    setUser({ name: "", email: "", gender: "", contact: "" });
   };
 
   return (
