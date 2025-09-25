@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./style.css";
-import config from "./config"; // Correct relative import
+import config from "./config"; // dynamic backend URL
 
 const UserManager = () => {
   const [users, setUsers] = useState([]);
@@ -13,7 +13,8 @@ const UserManager = () => {
   });
   const [message, setMessage] = useState("");
 
-  const baseUrl = `${config.url}/user`; // Absolute backend URL
+  // Base URL dynamically points to dev or prod backend
+  const baseUrl = `${config.url}/user`;
 
   // Fetch all users
   const fetchAllUsers = async () => {

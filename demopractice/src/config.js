@@ -1,13 +1,15 @@
-/*const config = {
-    url: "http://localhost:2030/userpractice"  
+let backendUrl = "";
+
+if (window.location.hostname === "localhost") {
+  // Development
+  backendUrl = "http://localhost:2001";
+} else {
+  // Production (Jenkins/Tomcat)
+  backendUrl = "http://localhost:2030/userpractice";
 }
 
-export default config;*/
-
-// src/config.js
 const config = {
-  // Backend URL (absolute)
-  url: "http://localhost:2030/userpractice"
+  url: backendUrl
 };
 
 export default config;
