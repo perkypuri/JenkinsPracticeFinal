@@ -1,161 +1,84 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./style.css";
-import config from "./config.js";
+import config from "../config";
 
-const UserManager = () => {
+export default function UserManager() {
   const [users, setUsers] = useState([]);
-  const [user, setUser] = useState({
-    id: "",
-    name: "",
-    email: "",
-    gender: "",
-    contact: ""
-  });
-  const [message, setMessage] = useState("");
+  const [newUser, setNewUser] = useState({ name: "", email: "", password: "" });
 
+  // base URL from config
   const baseUrl = `${config.url}/user`;
 
-  useEffect(() => {
-    fetchAllUsers();
-  }, []);
-
-  const fetchAllUsers = async () => {
+  // ===== FETCH ALL USERS =====
+  const fetchUsers = async () => {
     try {
       const res = await axios.get(`${baseUrl}/viewall`);
       setUsers(res.data);
-    } catch (error) {
-      setMessage("Failed to fetch users.");
+    } catch (err) {
+      console.error("Error fetching users:", err);
     }
   };
 
-  const handleChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
-  };
-
+  // ===== ADD USER =====
   const addUser = async () => {
     try {
-      await axios.post(`${baseUrl}/adduser`, user);
-      setMessage("User added successfully.");
-      fetchAllUsers();
-      resetForm();
-    } catch (error) {
-      setMessage("Error adding user.");
+      await axios.post(`${baseUrl}/adduser`, newUser);
+      setNewUser({ name: "", email: "", password: "" }); // reset form
+      fetchUsers(); // refresh list
+    } catch (err) {
+      console.error("Error adding user:", err);
     }
   };
 
+  // ===== DELETE USER =====
   const deleteUser = async (id) => {
     try {
-      const res = await axios.delete(`${baseUrl}/delete/${id}`);
-      setMessage(res.data);
-      fetchAllUsers();
-    } catch (error) {
-      setMessage("Error deleting user.");
+      await axios.delete(`${baseUrl}/delete/${id}`);
+      fetchUsers(); // refresh list
+    } catch (err) {
+      console.error("Error deleting user:", err);
     }
   };
 
-  const resetForm = () => {
-    setUser({
-      id: "",
-      name: "",
-      email: "",
-      gender: "",
-      contact: ""
-    });
-  };
+  // load users on mount
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   return (
-    <div className="student-container">
-      {message && (
-        <div
-          className={`message-banner ${
-            message.toLowerCase().includes("error") ? "error" : "success"
-          }`}
-        >
-          {message}
-        </div>
-      )}
+    <div>
+      <h1>User Manager</h1>
 
-      <h2>User Management</h2>
+      {/* Add User Form */}
+      <input
+        type="text"
+        placeholder="Name"
+        value={newUser.name}
+        onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+      />
+      <input
+        type="email"
+        placeholder="Email"
+        value={newUser.email}
+        onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={newUser.password}
+        onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
+      />
+      <button onClick={addUser}>Add User</button>
 
-      <div className="form-grid">
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          value={user.name}
-          onChange={handleChange}
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={user.email}
-          onChange={handleChange}
-        />
-        <select name="gender" value={user.gender} onChange={handleChange}>
-          <option value="">Select Gender</option>
-          <option value="MALE">MALE</option>
-          <option value="FEMALE">FEMALE</option>
-        </select>
-        <input
-          type="text"
-          name="contact"
-          placeholder="Contact"
-          value={user.contact}
-          onChange={handleChange}
-        />
-      </div>
-
-      <div className="btn-group">
-        <button className="btn-blue" onClick={addUser}>
-          Add User
-        </button>
-        <button className="btn-gray" onClick={resetForm}>
-          Reset
-        </button>
-      </div>
-
-      <h3>All Users</h3>
-      {users.length === 0 ? (
-        <p>No users found.</p>
-      ) : (
-        <div className="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Gender</th>
-                <th>Contact</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((usr) => (
-                <tr key={usr.id}>
-                  <td>{usr.id}</td>
-                  <td>{usr.name}</td>
-                  <td>{usr.email}</td>
-                  <td>{usr.gender}</td>
-                  <td>{usr.contact}</td>
-                  <td>
-                    <button
-                      className="btn-red"
-                      onClick={() => deleteUser(usr.id)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+      {/* User List */}
+      <ul>
+        {users.map((u) => (
+          <li key={u.id}>
+            {u.name} ({u.email})
+            <button onClick={() => deleteUser(u.id)}>Delete</button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
-};
-
-export default UserManager;
+}
