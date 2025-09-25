@@ -3,7 +3,7 @@ import axios from "axios";
 import "./style.css";
 import config from "./config"; // points to backend
 
-const BASE_URL = config.url;
+const BASE_URL = config.url/user;
 
 const UserManager = () => {
   const [users, setUsers] = useState([]);
