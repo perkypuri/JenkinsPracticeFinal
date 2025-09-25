@@ -3,5 +3,8 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/apiuser/',  // frontend deployed under apiuser in Tomcat
+  base: '/apiuser/',  // matches your Tomcat deployment folder
+  build: {
+    outDir: 'dist'
+  }
 })

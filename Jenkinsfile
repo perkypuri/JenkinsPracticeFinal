@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     stages {
-
         // ===== FRONTEND BUILD =====
         stage('Build Frontend') {
             steps {
@@ -49,7 +48,6 @@ pipeline {
                 '''
             }
         }
-
     }
 
     post {
